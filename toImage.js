@@ -38,7 +38,7 @@ for (var i = 0; normalize && i < rgbBuffers[0].length; i += 2) {
   if (isLE) { // Little Endian data
     blackPoint = Math.min(blackPoint,
       rgbBuffers[0].readUInt16LE(i),
-      rgbBuffers[1].readUInt1x6LE(i),
+      rgbBuffers[1].readUInt16LE(i),
       rgbBuffers[2].readUInt16LE(i));
     whitePoint = Math.max(whitePoint,
       rgbBuffers[0].readUInt16LE(i),
