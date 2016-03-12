@@ -26,33 +26,22 @@ var normalize = !!argv.n ? true : false; // use min and max values in data for n
 // Note: Assumes 8 bit values in the files
 var rgbBuffers = [];
 rgbBuffers[0] = fs.readFileSync(argv._[0]); // Red
-rgbBuffers[1] = fs.readFileSync(argv._[1]); // Green
-rgbBuffers[2] = fs.readFileSync(argv._[2]); // Blue
+rgbBuffers[1] = fs.readFileSync(argv._[0]); // Green
+rgbBuffers[2] = fs.readFileSync(argv._[0]); // Blue
 
 // Get Min and Max values (used for optional normalization)
 // Note: These are not true black and white points, but only a crude normalization.
 var blackPoint = 0xfffe;
 var whitePoint = 0x0000;
 for (var i = 0; normalize && i < rgbBuffers[0].length; i += 2) {
-  if (isLE) { // Little Endian data
-    blackPoint = Math.min(blackPoint,
-      rgbBuffers[0].readUInt8(i),
-      rgbBuffers[1].readUInt8(i),
-      rgbBuffers[2].readUInt8(i));
-    whitePoint = Math.max(whitePoint,
-      rgbBuffers[0].readUInt8(i),
-      rgbBuffers[1].readUInt8(i),
-      rgbBuffers[2].readUInt8(i));
-  } else { // Big Endian
-    blackPoint = Math.min(blackPoint,
-      rgbBuffers[0].readUInt16BE(i),
-      rgbBuffers[1].readUInt16BE(i),
-      rgbBuffers[2].readUInt16BE(i));
-    whitePoint = Math.max(whitePoint,
-      rgbBuffers[0].readUInt8(i),
-      rgbBuffers[1].readUInt8(i),
-      rgbBuffers[2].readUInt8(i));
-  }
+  blackPoint = Math.min(blackPoint,
+    rgbBuffers[0].readUInt8(i),
+    rgbBuffers[1].readUInt8(i),
+    rgbBuffers[2].readUInt8(i));
+  whitePoint = Math.max(whitePoint,
+    rgbBuffers[0].readUInt8(i),
+    rgbBuffers[1].readUInt8(i),
+    rgbBuffers[2].readUInt8(i));
 }
 
 if (normalize)
@@ -78,7 +67,8 @@ var image = new Jimp(width, height, function (err, image) {
     b = rgbBuffers[2].readUInt8(nextPixel);
     var rgba = ((r << 24) | (g << 16) | (b << 8) | 0xff) >>> 0; // the last operand is needed to force an 32bit *unsigned* int
     nextPixel++;
-    isLE ? image.bitmap.data.writeUInt32LE(rgba, i) : image.bitmap.data.writeUInt32BE(rgba, i); // XXX Check
+    image.bitmap.data.writeUInt32LE(rgba, i);
+    //image.bitmap.data.writeUInt32BE(rgba, i);
   }
   image.write(argv.o);
 });
