@@ -9,6 +9,7 @@
   "author": "Anders Weijnitz",
   "license": "MIT",
   "dependencies": {
+    "ascii-histogram": "^1.2.1",
     "jimp": "^0.2.21",
     "minimist": "^1.2.0"
   },

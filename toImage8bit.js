@@ -1,6 +1,8 @@
 var fs = require('fs');
 var checks = require('./lib/assertions.js');
 var utils = require('./lib/utils.js');
+var toHistogram = require('./lib/histogram.js').toHistogram;
+
 var map = utils.map;
 var to8bit = utils.to8bit;
 var Jimp = require("jimp");
@@ -22,12 +24,16 @@ try {
 var width = argv.w;
 var height = argv.h;
 var normalize = !!argv.n ? true : false; // use min and max values in data for normalization
+var printHisto = !!argv.h ? true : false;
 
 // Note: Assumes 8 bit values in the files
 var rgbBuffers = [];
 rgbBuffers[0] = fs.readFileSync(argv._[0]); // Red
 rgbBuffers[1] = fs.readFileSync(argv._[0]); // Green
 rgbBuffers[2] = fs.readFileSync(argv._[0]); // Blue
+
+if(printHisto)
+  console.log(toHistogram(rgbBuffers[0]));
 
 // Get Min and Max values (used for optional normalization)
 // Note: These are not true black and white points, but only a crude normalization.
