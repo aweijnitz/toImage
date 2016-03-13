@@ -9,12 +9,12 @@ var nrWholeRows = Math.floor(data.length / width);
 // Do all complete rows
 for(var i = 0; i < nrWholeRows; i++) {
   for (var w = 0; w < width; w++) {
-    var val = data.readUInt8(i).toString(16);
+    var val = data.readUInt8(i*width + w).toString(16);
 
     // Leading zero
     if(val.length < 2)
       console._stdout.write('0');
-    console._stdout.write(data.readUInt8(i).toString(16));
+    console._stdout.write(val);
 
     if(w < (width - 1))
       console._stdout.write(',');
